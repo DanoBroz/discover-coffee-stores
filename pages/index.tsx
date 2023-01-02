@@ -1,7 +1,14 @@
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
+import Banner from "../components/Banner";
+import type { MouseEvent } from "react";
 
 export default function Home() {
+  const handleClick = (e: MouseEvent) => {
+    e.preventDefault();
+    console.log("You clicked the button!");
+  };
+
   return (
     <>
       <Head>
@@ -11,7 +18,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.main}>
-        <h1 className={styles.title}>Coffee Connoisseur</h1>
+        <Banner buttonText="View stores nearby" buttonFunction={handleClick} />
       </main>
     </>
   );
