@@ -20,8 +20,11 @@ export default function CoffeeStore() {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <main>
-                <Link href="/" legacyBehavior prefetch>
+                <Link href="/" legacyBehavior>
                     <a>Back to home</a>
+                </Link>
+                <Link href="/coffee-store/dynamic" legacyBehavior>
+                    <a>go to dynamic page</a>
                 </Link>
                 <h1>Coffee Store page {router.query.id}</h1>
             </main>
