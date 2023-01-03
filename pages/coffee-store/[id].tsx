@@ -1,4 +1,5 @@
 import Head from "next/head";
+import Link from "next/link";
 import { useRouter } from "next/router";
 
 export default function CoffeeStore() {
@@ -19,7 +20,10 @@ export default function CoffeeStore() {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <main>
-                <h1>Coffee Store</h1>
+                <Link href="/" legacyBehavior prefetch>
+                    <a>Back to home</a>
+                </Link>
+                <h1>Coffee Store page {router.query.id}</h1>
             </main>
         </>
     );
