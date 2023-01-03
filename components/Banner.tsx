@@ -1,5 +1,5 @@
 import { MouseEvent } from "react";
-import styles from "./banner.module.css";
+import styles from "./Banner.module.css";
 
 interface ButtonProps {
   buttonText: string;
