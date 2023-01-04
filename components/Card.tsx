@@ -1,5 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
+import classnames from "classnames";
+
+import styles from "./Card.module.css";
 
 export default function Card({
     name,
@@ -12,14 +15,21 @@ export default function Card({
 }) {
     return (
         <Link href={href} legacyBehavior>
-            <a>
-                <h2>{name}</h2>
-                <Image
-                    src={imageUrl}
-                    width={260}
-                    height={160}
-                    alt={`coffee store - ${name}`}
-                />
+            <a className={styles.cardLink}>
+                <div className={classnames("glass", styles.container)}>
+                    <div className={styles.cardHeaderWrapper}>
+                        <h2 className={styles.cardHeader}>{name}</h2>
+                    </div>
+                    <div className={styles.cardImageWrapper}>
+                        <Image
+                            className={styles.cardImage}
+                            src={imageUrl}
+                            width={260}
+                            height={160}
+                            alt={`coffee store - ${name}`}
+                        />
+                    </div>
+                </div>
             </a>
         </Link>
     );
