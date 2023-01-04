@@ -3,6 +3,7 @@ import styles from "../styles/Home.module.css";
 import Banner from "../components/Banner";
 import type { MouseEvent } from "react";
 import Image from "next/image";
+import Card from "../components/Card";
 
 export default function Home() {
     const handleClick = (e: MouseEvent) => {
@@ -35,6 +36,11 @@ export default function Home() {
                     height={400}
                     alt="hero - girl with coffee sitting on clouds"
                     className={styles.heroImage}
+                />
+                <Card
+                    name="DarkHorse Coffee"
+                    imageUrl="/static/hero-image.png"
+                    href="/coffee-store/darkhorse-coffee"
                 />
             </main>
         </>
