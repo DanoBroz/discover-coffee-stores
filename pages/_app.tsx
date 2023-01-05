@@ -12,7 +12,7 @@ export default function App({ Component, pageProps }: AppProps) {
     return (
         <div className={ibmPlexSans.className}>
             <Component {...pageProps} />
-            <footer>Hello there</footer>
+            {/* <footer>Hello there</footer> */}
         </div>
     );
 }

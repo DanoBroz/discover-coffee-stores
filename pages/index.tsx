@@ -63,16 +63,21 @@ export default function Home(props: HomeProps) {
                     alt="hero - girl with coffee sitting on clouds"
                     className={styles.heroImage}
                 />
-                <div className={styles.cardLayout}>
-                    {coffeeStores.map((store) => (
-                        <Card
-                            key={String(store.id)}
-                            name={store.name}
-                            imageUrl={store.imgUrl}
-                            href={`/coffee-store/${store.id}`}
-                        />
-                    ))}
-                </div>
+                {coffeeStores.length && (
+                    <>
+                        <h2 className={styles.heading2}>Toronto stores</h2>
+                        <div className={styles.cardLayout}>
+                            {coffeeStores.map((store) => (
+                                <Card
+                                    key={String(store.id)}
+                                    name={store.name}
+                                    imageUrl={store.imgUrl}
+                                    href={`/coffee-store/${store.id}`}
+                                />
+                            ))}
+                        </div>
+                    </>
+                )}
             </main>
         </>
     );
