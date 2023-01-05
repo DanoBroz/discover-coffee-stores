@@ -5,12 +5,37 @@ import type { MouseEvent } from "react";
 import Image from "next/image";
 import Card from "../components/Card";
 import coffeeStores from "../data/coffee-stores.json";
+import { GetStaticProps } from "next";
 
-export default function Home() {
+interface CoffeeStore {
+    id: number;
+    name: string;
+    imgUrl: string;
+    websiteUrl: string;
+    address: string;
+    neighbourhood: string;
+}
+
+interface HomeProps {
+    coffeeStores: CoffeeStore[];
+}
+
+export const getStaticProps: GetStaticProps = async (context) => {
+    return {
+        props: {
+            coffeeStores,
+        },
+    };
+};
+
+export default function Home(props: HomeProps) {
+    const { coffeeStores } = props;
     const handleClick = (e: MouseEvent) => {
         e.preventDefault();
         console.log("You clicked the button!");
     };
+
+    console.log(props);
 
     return (
         <>
