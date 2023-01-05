@@ -4,6 +4,7 @@ import Banner from "../components/Banner";
 import type { MouseEvent } from "react";
 import Image from "next/image";
 import Card from "../components/Card";
+import coffeeStores from "../data/coffee-stores.json";
 
 export default function Home() {
     const handleClick = (e: MouseEvent) => {
@@ -37,11 +38,16 @@ export default function Home() {
                     alt="hero - girl with coffee sitting on clouds"
                     className={styles.heroImage}
                 />
-                <Card
-                    name="DarkHorse Coffee"
-                    imageUrl="/static/hero-image.png"
-                    href="/coffee-store/darkhorse-coffee"
-                />
+                <div className={styles.cardLayout}>
+                    {coffeeStores.map((store) => (
+                        <Card
+                            key={String(store.id)}
+                            name={store.name}
+                            imageUrl={store.imgUrl}
+                            href={store.websiteUrl}
+                        />
+                    ))}
+                </div>
             </main>
         </>
     );

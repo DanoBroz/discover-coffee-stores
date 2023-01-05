@@ -5,16 +5,18 @@ import classnames from "classnames";
 import styles from "./Card.module.css";
 
 export default function Card({
+    key,
     name,
     imageUrl,
     href,
 }: {
+    key: string;
     name: string;
     imageUrl: string;
     href: string;
 }) {
     return (
-        <Link href={href} legacyBehavior>
+        <Link key={key} href={href} legacyBehavior>
             <a className={styles.cardLink}>
                 <div className={classnames("glass", styles.container)}>
                     <div className={styles.cardHeaderWrapper}>
