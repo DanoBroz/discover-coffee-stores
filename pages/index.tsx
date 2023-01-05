@@ -4,7 +4,7 @@ import Banner from "../components/Banner";
 import type { MouseEvent } from "react";
 import Image from "next/image";
 import Card from "../components/Card";
-import coffeeStores from "../data/coffee-stores.json";
+import coffeeStoresData from "../data/coffee-stores.json";
 import { GetStaticProps } from "next";
 
 interface CoffeeStore {
@@ -23,7 +23,7 @@ interface HomeProps {
 export const getStaticProps: GetStaticProps = async (context) => {
     return {
         props: {
-            coffeeStores,
+            coffeeStores: coffeeStoresData,
         },
     };
 };
