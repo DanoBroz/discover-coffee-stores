@@ -7,7 +7,7 @@ import Card from "../components/Card";
 import coffeeStoresData from "../data/coffee-stores.json";
 import { GetStaticProps } from "next";
 
-interface CoffeeStore {
+export interface CoffeeStore {
     id: number;
     name: string;
     imgUrl: string;

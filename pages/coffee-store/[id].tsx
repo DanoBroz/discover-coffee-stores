@@ -1,9 +1,37 @@
+import { GetStaticProps } from "next";
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import type { CoffeeStore } from "..";
+import coffeeStoresData from "../../data/coffee-stores.json";
 
-export default function CoffeeStore() {
-    const router = useRouter();
+interface CoffeeStoreProps {
+    coffeeStore: CoffeeStore;
+}
+
+export const getStaticProps: GetStaticProps = async ({ params }) => {
+    return {
+        props: {
+            coffeeStore: coffeeStoresData.find(
+                (coffeeStore) => coffeeStore.id === Number(params?.id)
+            ),
+        },
+    };
+};
+
+export const getStaticPaths = async () => {
+    return {
+        paths: [{ params: { id: "0" } }, { params: { id: "1" } }, ,],
+        fallback: true,
+    };
+};
+
+export default function CoffeeStore({ coffeeStore }: CoffeeStoreProps) {
+    const { isFallback } = useRouter();
+
+    if (isFallback) {
+        return <div>Loading...</div>;
+    }
 
     return (
         <>
@@ -26,7 +54,7 @@ export default function CoffeeStore() {
                 <Link href="/coffee-store/dynamic" legacyBehavior>
                     <a>go to dynamic page</a>
                 </Link>
-                <h1>Coffee Store page {router.query.id}</h1>
+                <h1>Coffee Store page {coffeeStore.name}</h1>
             </main>
         </>
     );
