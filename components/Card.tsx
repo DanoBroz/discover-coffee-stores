@@ -4,17 +4,16 @@ import classnames from "classnames";
 
 import styles from "./Card.module.css";
 
-export default function Card({
-    key,
-    name,
-    imageUrl,
-    href,
-}: {
+interface CardProps {
     key: string;
     name: string;
     imageUrl: string;
     href: string;
-}) {
+}
+
+export default function Card(props: CardProps) {
+    const { key, name, imageUrl, href } = props;
+
     return (
         <Link key={key} href={href} legacyBehavior>
             <a className={styles.cardLink}>
