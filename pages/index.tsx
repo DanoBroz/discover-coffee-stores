@@ -44,7 +44,7 @@ export default function Home() {
                             key={String(store.id)}
                             name={store.name}
                             imageUrl={store.imgUrl}
-                            href={store.websiteUrl}
+                            href={`/coffee-stores/${store.id}`}
                         />
                     ))}
                 </div>
