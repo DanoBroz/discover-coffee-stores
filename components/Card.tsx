@@ -28,6 +28,7 @@ export default function Card(props: CardProps) {
                             width={260}
                             height={160}
                             alt={`coffee store - ${name}`}
+                            style={{ objectFit: "cover" }}
                         />
                     </div>
                 </div>

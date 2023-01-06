@@ -4,11 +4,11 @@ import Banner from "../components/Banner";
 import type { MouseEvent } from "react";
 import Image from "next/image";
 import Card from "../components/Card";
-import coffeeStoresData from "../data/coffee-stores.json";
+import coffeeStoresDummy from "../data/coffee-stores.json";
 import { GetStaticProps } from "next";
 
 export interface CoffeeStore {
-    id: number;
+    fsq_id: string;
     name: string;
     imgUrl: string;
     websiteUrl: string;
@@ -21,9 +21,23 @@ interface HomeProps {
 }
 
 export const getStaticProps: GetStaticProps = async (context) => {
+    const options = {
+        method: "GET",
+        headers: {
+            accept: "application/json",
+            Authorization: "fsq3eT0yX/SMxLCOp/I/Y+9zJpMlj3JMoAoDT0cKjegvgfg=",
+        },
+    };
+
+    const response = await fetch(
+        "https://api.foursquare.com/v3/places/search?query=coffee&ll=49.828932%2C18.170823&limit=6",
+        options
+    );
+    const coffeeStoresData = await response.json();
+
     return {
         props: {
-            coffeeStores: coffeeStoresData,
+            coffeeStores: coffeeStoresData.results,
         },
     };
 };
@@ -67,10 +81,13 @@ export default function Home(props: HomeProps) {
                         <div className={styles.cardLayout}>
                             {coffeeStores.map((store) => (
                                 <Card
-                                    key={String(store.id)}
+                                    key={String(store.fsq_id)}
                                     name={store.name}
-                                    imageUrl={store.imgUrl}
-                                    href={`/coffee-store/${store.id}`}
+                                    imageUrl={
+                                        store.imgUrl ||
+                                        coffeeStoresDummy[0].imgUrl
+                                    }
+                                    href={`/coffee-store/${store.fsq_id}`}
                                 />
                             ))}
                         </div>
