@@ -35,8 +35,6 @@ export default function Home(props: HomeProps) {
         console.log("You clicked the button!");
     };
 
-    console.log(props);
-
     return (
         <>
             <Head>
