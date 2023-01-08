@@ -3,16 +3,17 @@ import Link from "next/link";
 import classnames from "classnames";
 
 import styles from "./Card.module.css";
+import type { Key } from "react";
 
 interface CardProps {
-    key: string;
     name: string;
     imageUrl: string;
     href: string;
+    key: Key | null | undefined;
 }
 
 export default function Card(props: CardProps) {
-    const { key, name, imageUrl, href } = props;
+    const { name, imageUrl, href, key } = props;
 
     return (
         <Link key={key} href={href} legacyBehavior>

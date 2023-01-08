@@ -6,6 +6,7 @@ import Image from "next/image";
 import Card from "../components/Card";
 import coffeeStoresDummy from "../data/coffee-stores.json";
 import { GetStaticProps } from "next";
+import { fetchCoffeeStores } from "../lib/coffee-stores";
 
 export interface CoffeeStore {
     fsq_id: string;
@@ -21,19 +22,7 @@ interface HomeProps {
 }
 
 export const getStaticProps: GetStaticProps = async (context) => {
-    const options = {
-        method: "GET",
-        headers: {
-            accept: "application/json",
-            Authorization: String(process.env.FOURSQUARE_API_KEY),
-        },
-    };
-
-    const response = await fetch(
-        "https://api.foursquare.com/v3/places/search?query=coffee&ll=49.828932%2C18.170823&limit=6",
-        options
-    );
-    const coffeeStoresData = await response.json();
+    const coffeeStoresData = await fetchCoffeeStores();
 
     return {
         props: {
@@ -81,7 +70,7 @@ export default function Home(props: HomeProps) {
                         <div className={styles.cardLayout}>
                             {coffeeStores.map((store) => (
                                 <Card
-                                    key={String(store.fsq_id)}
+                                    key={store.fsq_id}
                                     name={store.name}
                                     imageUrl={
                                         store.imgUrl ||
