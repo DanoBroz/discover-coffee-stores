@@ -25,7 +25,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
         method: "GET",
         headers: {
             accept: "application/json",
-            Authorization: "fsq3eT0yX/SMxLCOp/I/Y+9zJpMlj3JMoAoDT0cKjegvgfg=",
+            Authorization: String(process.env.FOURSQUARE_API_KEY),
         },
     };
 
