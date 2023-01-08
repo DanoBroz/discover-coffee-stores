@@ -1,3 +1,5 @@
+import { CoffeeStore } from "../pages";
+
 const getUrlForCoffeeStores = (
     latLong: string,
     query: string,
@@ -6,7 +8,7 @@ const getUrlForCoffeeStores = (
     return `https://api.foursquare.com/v3/places/search?query=${query}&ll=${latLong}&limit=${limit}`;
 };
 
-export const fetchCoffeeStores = async () => {
+export const fetchCoffeeStores = async (): Promise<CoffeeStore[]> => {
     const options = {
         method: "GET",
         headers: {
@@ -21,5 +23,5 @@ export const fetchCoffeeStores = async () => {
     );
     const coffeeStoresData = await response.json();
 
-    return coffeeStoresData;
+    return coffeeStoresData.results;
 };

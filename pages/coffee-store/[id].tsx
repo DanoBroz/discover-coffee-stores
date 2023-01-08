@@ -4,28 +4,32 @@ import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import type { CoffeeStore } from "..";
-import coffeeStoresData from "../../data/coffee-stores.json";
 
 import styles from "../../styles/coffee-store.module.css";
 import classnames from "classnames";
+import { fetchCoffeeStores } from "../../lib/coffee-stores";
+import coffeeStoresDummy from "../../data/coffee-stores.json";
 
 interface CoffeeStoreProps {
     coffeeStore: CoffeeStore;
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
+    const coffeeStores = await fetchCoffeeStores();
+
     return {
         props: {
-            coffeeStore: coffeeStoresData.find(
-                (coffeeStore) => coffeeStore.id === Number(params?.id)
+            coffeeStore: coffeeStores.find(
+                (coffeeStore) => coffeeStore.fsq_id === params?.id
             ),
         },
     };
 };
 
 export const getStaticPaths = async () => {
-    const paths = coffeeStoresData.map((coffeeStore) => ({
-        params: { id: coffeeStore.id.toString() },
+    const coffeeStores = await fetchCoffeeStores();
+    const paths = coffeeStores.map((coffeeStore) => ({
+        params: { id: coffeeStore.fsq_id.toString() },
     }));
 
     return {
@@ -61,10 +65,11 @@ export default function CoffeeStore({ coffeeStore }: CoffeeStoreProps) {
                             <p className={styles.name}>{name}</p>
                         </div>
                         <Image
-                            src={imgUrl}
+                            src={imgUrl || coffeeStoresDummy[0].imgUrl}
                             width={600}
                             height={300}
                             alt={name}
+                            style={{ objectFit: "cover" }}
                             className={styles.storeImg}
                         />
                     </div>
