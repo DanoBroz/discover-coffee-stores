@@ -40,7 +40,7 @@ export const getStaticPaths = async () => {
 
 export default function CoffeeStore({ coffeeStore }: CoffeeStoreProps) {
     const { isFallback } = useRouter();
-    const { address, name, neighbourhood, imgUrl } = coffeeStore;
+    const { location, name, imgUrl } = coffeeStore;
 
     const handleUpvoteButton = () => {};
 
@@ -81,17 +81,21 @@ export default function CoffeeStore({ coffeeStore }: CoffeeStoreProps) {
                                 height="24"
                                 alt=""
                             />
-                            <p className={styles.text}>{address}</p>
+                            <p className={styles.text}>{location.address}</p>
                         </div>
-                        <div className={styles.iconWrapper}>
-                            <Image
-                                src="/static/icons/nearMe.svg"
-                                width="24"
-                                height="24"
-                                alt=""
-                            />
-                            <p className={styles.text}>{neighbourhood}</p>
-                        </div>
+                        {location.neighborhood && (
+                            <div className={styles.iconWrapper}>
+                                <Image
+                                    src="/static/icons/nearMe.svg"
+                                    width="24"
+                                    height="24"
+                                    alt=""
+                                />
+                                <p className={styles.text}>
+                                    {location?.neighborhood?.[0]}
+                                </p>
+                            </div>
+                        )}
                         <div className={styles.iconWrapper}>
                             <Image
                                 src="/static/icons/star.svg"

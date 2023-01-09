@@ -13,8 +13,10 @@ export interface CoffeeStore {
     name: string;
     imgUrl: string;
     websiteUrl: string;
-    address: string;
-    neighbourhood: string;
+    location: {
+        address: string;
+        neighborhood: string[];
+    };
 }
 
 interface HomeProps {
