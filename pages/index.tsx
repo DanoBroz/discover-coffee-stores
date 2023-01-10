@@ -7,6 +7,7 @@ import Card from "../components/Card";
 import coffeeStoresDummy from "../data/coffee-stores.json";
 import { GetStaticProps } from "next";
 import { fetchCoffeeStores } from "../lib/coffee-stores";
+import { useTrackLocation } from "../hooks/useTrackLocation";
 
 export interface CoffeeStore {
     id: string;
@@ -35,9 +36,19 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
 export default function Home(props: HomeProps) {
     const { coffeeStores } = props;
+    const {
+        handleTrackLocation,
+        latLong,
+        locationErrorMsg,
+        isFindingLocation,
+    } = useTrackLocation();
+
     const handleClick = (e: MouseEvent) => {
         e.preventDefault();
         console.log("You clicked the button!");
+        handleTrackLocation();
+        console.log({ latLong });
+        console.log({ locationErrorMsg });
     };
 
     return (
@@ -56,16 +67,22 @@ export default function Home(props: HomeProps) {
             </Head>
             <main className={styles.main}>
                 <Banner
-                    buttonText="View stores nearby"
+                    buttonText={
+                        isFindingLocation ? "Locating..." : "View stores nearby"
+                    }
                     buttonFunction={handleClick}
                 />
-                <Image
-                    src="/static/hero-image.png"
-                    width={700}
-                    height={400}
-                    alt="hero - girl with coffee sitting on clouds"
-                    className={styles.heroImage}
-                />
+                {locationErrorMsg && (
+                    <p>Something went wrong: {locationErrorMsg}</p>
+                )}
+                <div className={styles.heroImage}>
+                    <Image
+                        src="/static/hero-image.png"
+                        width={700}
+                        height={400}
+                        alt="hero - girl with coffee sitting on clouds"
+                    />
+                </div>
                 {coffeeStores.length && (
                     <>
                         <h2 className={styles.heading2}>
