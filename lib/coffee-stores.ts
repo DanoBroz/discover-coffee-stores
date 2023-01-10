@@ -14,7 +14,23 @@ const getUrlForCoffeeStores = (
     return `https://api.foursquare.com/v3/places/search?query=${query}&ll=${latLong}&limit=${limit}`;
 };
 
+const getListOfCoffeeStorePhotos = async () => {
+    const photos = await unsplash.search.getPhotos({
+        query: "coffee shop",
+        page: 1,
+        perPage: 30,
+    });
+
+    const unsplashResults = photos?.response?.results.map(
+        (result) => result.urls.small
+    );
+
+    return unsplashResults;
+};
+
 export const fetchCoffeeStores = async (): Promise<CoffeeStore[]> => {
+    const photos = await getListOfCoffeeStorePhotos();
+
     const options = {
         method: "GET",
         headers: {
@@ -29,5 +45,10 @@ export const fetchCoffeeStores = async (): Promise<CoffeeStore[]> => {
     );
     const coffeeStoresData = await response.json();
 
-    return coffeeStoresData.results;
+    return coffeeStoresData.results.map((result: any) => {
+        return {
+            ...result,
+            imgUrl: photos?.[0] || "",
+        };
+    });
 };
