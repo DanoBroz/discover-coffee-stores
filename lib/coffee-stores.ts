@@ -1,5 +1,11 @@
 import { CoffeeStore } from "../pages";
 
+import { createApi } from "unsplash-js";
+
+const unsplash = createApi({
+    accessKey: String(process.env.UNSPLASH_API_KEY),
+});
+
 const getUrlForCoffeeStores = (
     latLong: string,
     query: string,
