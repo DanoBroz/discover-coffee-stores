@@ -68,7 +68,9 @@ export default function Home(props: HomeProps) {
                 />
                 {coffeeStores.length && (
                     <>
-                        <h2 className={styles.heading2}>Toronto stores</h2>
+                        <h2 className={styles.heading2}>
+                            Ostrava-poruba stores
+                        </h2>
                         <div className={styles.cardLayout}>
                             {coffeeStores.map((store) => (
                                 <Card
