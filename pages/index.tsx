@@ -1,7 +1,7 @@
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
 import Banner from "../components/Banner";
-import type { MouseEvent } from "react";
+import { MouseEvent, useEffect, useState } from "react";
 import Image from "next/image";
 import Card from "../components/Card";
 import coffeeStoresDummy from "../data/coffee-stores.json";
@@ -35,7 +35,6 @@ export const getStaticProps: GetStaticProps = async (context) => {
 };
 
 export default function Home(props: HomeProps) {
-    const { coffeeStores } = props;
     const {
         handleTrackLocation,
         latLong,
@@ -43,13 +42,30 @@ export default function Home(props: HomeProps) {
         isFindingLocation,
     } = useTrackLocation();
 
+    const [coffeeStores, setCoffeeStores] = useState<CoffeeStore[]>([]);
+
     const handleClick = (e: MouseEvent) => {
         e.preventDefault();
-        console.log("You clicked the button!");
         handleTrackLocation();
-        console.log({ latLong });
-        console.log({ locationErrorMsg });
     };
+
+    useEffect(() => {
+        async function setCoffeeStoresByLocation() {
+            if (latLong) {
+                try {
+                    const fetchedCoffeeStores = await fetchCoffeeStores(
+                        latLong,
+                        "30"
+                    );
+                    console.log(fetchedCoffeeStores);
+                    setCoffeeStores(fetchedCoffeeStores);
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+        }
+        setCoffeeStoresByLocation();
+    }, [latLong]);
 
     return (
         <>
@@ -83,13 +99,32 @@ export default function Home(props: HomeProps) {
                         alt="hero - girl with coffee sitting on clouds"
                     />
                 </div>
-                {coffeeStores.length && (
+                {coffeeStores.length > 0 && (
+                    <>
+                        <h2 className={styles.heading2}>stores near me</h2>
+                        <div className={styles.cardLayout}>
+                            {coffeeStores.map((store) => (
+                                <Card
+                                    key={store.id}
+                                    name={store.name}
+                                    imageUrl={
+                                        store.imgUrl ||
+                                        coffeeStoresDummy[0].imgUrl
+                                    }
+                                    href={`/coffee-store/${store.id}`}
+                                />
+                            ))}
+                        </div>
+                    </>
+                )}
+
+                {props.coffeeStores.length > 0 && (
                     <>
                         <h2 className={styles.heading2}>
                             Ostrava-poruba stores
                         </h2>
                         <div className={styles.cardLayout}>
-                            {coffeeStores.map((store) => (
+                            {props.coffeeStores.map((store) => (
                                 <Card
                                     key={store.id}
                                     name={store.name}

@@ -3,7 +3,7 @@ import { CoffeeStore } from "../pages";
 import { createApi } from "unsplash-js";
 
 const unsplash = createApi({
-    accessKey: String(process.env.UNSPLASH_API_KEY),
+    accessKey: String(process.env.NEXT_PUBLIC_UNSPLASH_API_KEY),
 });
 
 const getUrlForCoffeeStores = (
@@ -28,19 +28,26 @@ const getListOfCoffeeStorePhotos = async () => {
     return unsplashResults;
 };
 
-export const fetchCoffeeStores = async (): Promise<CoffeeStore[]> => {
+export const fetchCoffeeStores = async (
+    latlng?: string,
+    limit = "6"
+): Promise<CoffeeStore[]> => {
     const photos = await getListOfCoffeeStorePhotos();
 
-    const options = {
+    const options: RequestInit = {
         method: "GET",
         headers: {
             accept: "application/json",
-            Authorization: String(process.env.FOURSQUARE_API_KEY),
+            Authorization: String(process.env.NEXT_PUBLIC_FOURSQUARE_API_KEY),
         },
     };
 
     const response = await fetch(
-        getUrlForCoffeeStores("49.828932%2C18.170823", "coffee", "6"),
+        getUrlForCoffeeStores(
+            (latlng = "49.828932%2C18.170823"),
+            "coffee",
+            limit
+        ),
         options
     );
     const coffeeStoresData = await response.json();
