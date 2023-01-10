@@ -9,7 +9,7 @@ import { GetStaticProps } from "next";
 import { fetchCoffeeStores } from "../lib/coffee-stores";
 
 export interface CoffeeStore {
-    fsq_id: string;
+    id: string;
     name: string;
     imgUrl: string;
     websiteUrl: string;
@@ -72,13 +72,13 @@ export default function Home(props: HomeProps) {
                         <div className={styles.cardLayout}>
                             {coffeeStores.map((store) => (
                                 <Card
-                                    key={store.fsq_id}
+                                    key={store.id}
                                     name={store.name}
                                     imageUrl={
                                         store.imgUrl ||
                                         coffeeStoresDummy[0].imgUrl
                                     }
-                                    href={`/coffee-store/${store.fsq_id}`}
+                                    href={`/coffee-store/${store.id}`}
                                 />
                             ))}
                         </div>

@@ -20,7 +20,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     return {
         props: {
             coffeeStore: coffeeStores.find(
-                (coffeeStore) => coffeeStore.fsq_id === params?.id
+                (coffeeStore) => coffeeStore.id === params?.id
             ),
         },
     };
@@ -29,7 +29,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 export const getStaticPaths = async () => {
     const coffeeStores = await fetchCoffeeStores();
     const paths = coffeeStores.map((coffeeStore) => ({
-        params: { id: coffeeStore.fsq_id.toString() },
+        params: { id: coffeeStore.id.toString() },
     }));
 
     return {
