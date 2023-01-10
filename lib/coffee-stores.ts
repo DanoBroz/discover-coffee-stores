@@ -45,10 +45,10 @@ export const fetchCoffeeStores = async (): Promise<CoffeeStore[]> => {
     );
     const coffeeStoresData = await response.json();
 
-    return coffeeStoresData.results.map((result: any) => {
+    return coffeeStoresData.results.map((result: any, index: number) => {
         return {
             ...result,
-            imgUrl: photos?.[0] || "",
+            imgUrl: photos?.[index] || "",
         };
     });
 };
