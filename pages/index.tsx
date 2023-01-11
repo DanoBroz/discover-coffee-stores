@@ -1,13 +1,14 @@
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
 import Banner from "../components/Banner";
-import { MouseEvent, useEffect, useState } from "react";
+import { MouseEvent, useContext, useEffect, useState } from "react";
 import Image from "next/image";
 import Card from "../components/Card";
 import coffeeStoresDummy from "../data/coffee-stores.json";
 import { GetStaticProps } from "next";
 import { fetchCoffeeStores } from "../lib/coffee-stores";
 import { useTrackLocation } from "../hooks/useTrackLocation";
+import { StoreContext } from "./_app";
 
 export interface CoffeeStore {
     id: string;
@@ -35,14 +36,10 @@ export const getStaticProps: GetStaticProps = async (context) => {
 };
 
 export default function Home(props: HomeProps) {
-    const {
-        handleTrackLocation,
-        latLong,
-        locationErrorMsg,
-        isFindingLocation,
-    } = useTrackLocation();
+    const { handleTrackLocation, locationErrorMsg, isFindingLocation } =
+        useTrackLocation();
 
-    const [coffeeStores, setCoffeeStores] = useState<CoffeeStore[]>([]);
+    const { dispatch, state } = useContext(StoreContext);
 
     const handleClick = (e: MouseEvent) => {
         e.preventDefault();
@@ -51,21 +48,27 @@ export default function Home(props: HomeProps) {
 
     useEffect(() => {
         async function setCoffeeStoresByLocation() {
-            if (latLong) {
+            if (state.latLong) {
                 try {
                     const fetchedCoffeeStores = await fetchCoffeeStores(
-                        latLong,
+                        state.latLong,
                         "30"
                     );
                     console.log(fetchedCoffeeStores);
-                    setCoffeeStores(fetchedCoffeeStores);
+                    dispatch({
+                        type: "SET_COFFEE_STORES",
+                        payload: {
+                            ...state,
+                            coffeeStores: fetchedCoffeeStores,
+                        },
+                    });
                 } catch (error) {
                     console.log(error);
                 }
             }
         }
         setCoffeeStoresByLocation();
-    }, [latLong]);
+    }, [state.latLong]);
 
     return (
         <>
@@ -99,11 +102,11 @@ export default function Home(props: HomeProps) {
                         alt="hero - girl with coffee sitting on clouds"
                     />
                 </div>
-                {coffeeStores.length > 0 && (
+                {state.coffeeStores.length > 0 && (
                     <>
                         <h2 className={styles.heading2}>stores near me</h2>
                         <div className={styles.cardLayout}>
-                            {coffeeStores.map((store) => (
+                            {state.coffeeStores.map((store) => (
                                 <Card
                                     key={store.id}
                                     name={store.name}

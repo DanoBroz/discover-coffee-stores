@@ -21,10 +21,10 @@ interface storeState {
 
 interface DispatchAction {
     type: "SET_LAT_LONG" | "SET_COFFEE_STORES";
-    payload: { latLong: string; coffeeStores: [] };
+    payload: { latLong: string; coffeeStores: CoffeeStore[] };
 }
 
-const StoreContext = createContext<{
+export const StoreContext = createContext<{
     state: storeState;
     dispatch: Dispatch<DispatchAction>;
 }>({
@@ -35,23 +35,15 @@ const StoreContext = createContext<{
     dispatch: () => null,
 });
 
-export const ACTION_TYPES = {
-    SET_LAT_LONG: "SET_LAT_LONG",
-    SET_COFFEE_STORES: "SET_COFFEE_STORES",
-};
-
 const storeReducer = (
-    state: { latLong: string; coffeeStores: [] },
-    action: {
-        type: "SET_LAT_LONG" | "SET_COFFEE_STORES";
-        payload: { latLong: string; coffeeStores: [] };
-    }
+    state: { latLong: string; coffeeStores: CoffeeStore[] },
+    action: DispatchAction
 ) => {
     switch (action.type) {
-        case ACTION_TYPES.SET_LAT_LONG: {
+        case "SET_LAT_LONG": {
             return { ...state, latLong: action.payload.latLong };
         }
-        case ACTION_TYPES.SET_COFFEE_STORES: {
+        case "SET_COFFEE_STORES": {
             return { ...state, coffeeStores: action.payload.coffeeStores };
         }
         default:
@@ -60,10 +52,11 @@ const storeReducer = (
 };
 
 const StoreProvider = ({ children }: PropsWithChildren) => {
-    const [state, dispatch] = useReducer(storeReducer, {
+    const initialState = {
         latLong: "",
         coffeeStores: [],
-    });
+    };
+    const [state, dispatch] = useReducer(storeReducer, initialState);
 
     return (
         <StoreContext.Provider value={{ state, dispatch }}>
