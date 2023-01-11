@@ -17,11 +17,13 @@ interface CoffeeStoreProps {
 export const getStaticProps: GetStaticProps = async ({ params }) => {
     const coffeeStores = await fetchCoffeeStores();
 
+    const findCoffeeStoreById = coffeeStores.find(
+        (coffeStore) => coffeStore.id === params?.id
+    );
+
     return {
         props: {
-            coffeeStore: coffeeStores.find(
-                (coffeeStore) => coffeeStore.id === params?.id
-            ),
+            coffeeStore: findCoffeeStoreById ? findCoffeeStoreById : {},
         },
     };
 };
@@ -40,7 +42,6 @@ export const getStaticPaths = async () => {
 
 export default function CoffeeStore({ coffeeStore }: CoffeeStoreProps) {
     const { isFallback } = useRouter();
-    const { location, name, imgUrl } = coffeeStore;
 
     const handleUpvoteButton = () => {};
 
@@ -52,7 +53,7 @@ export default function CoffeeStore({ coffeeStore }: CoffeeStoreProps) {
         <>
             <div className={styles.layout}>
                 <Head>
-                    <title>{name}</title>
+                    <title>{coffeeStore.name}</title>
                 </Head>
                 <div className={styles.container}>
                     <div className={styles.col1}>
@@ -62,13 +63,16 @@ export default function CoffeeStore({ coffeeStore }: CoffeeStoreProps) {
                             </Link>
                         </div>
                         <div className={styles.nameWrapper}>
-                            <p className={styles.name}>{name}</p>
+                            <p className={styles.name}>{coffeeStore.name}</p>
                         </div>
                         <Image
-                            src={imgUrl || coffeeStoresDummy[0].imgUrl}
+                            src={
+                                coffeeStore.imgUrl ||
+                                coffeeStoresDummy[0].imgUrl
+                            }
                             width={600}
                             height={300}
-                            alt={name}
+                            alt={coffeeStore.name}
                             style={{ objectFit: "cover" }}
                             className={styles.storeImg}
                         />
@@ -81,9 +85,11 @@ export default function CoffeeStore({ coffeeStore }: CoffeeStoreProps) {
                                 height="24"
                                 alt=""
                             />
-                            <p className={styles.text}>{location.address}</p>
+                            <p className={styles.text}>
+                                {coffeeStore.location.address}
+                            </p>
                         </div>
-                        {location.neighborhood && (
+                        {coffeeStore.location.neighborhood && (
                             <div className={styles.iconWrapper}>
                                 <Image
                                     src="/static/icons/nearMe.svg"
@@ -92,7 +98,7 @@ export default function CoffeeStore({ coffeeStore }: CoffeeStoreProps) {
                                     alt=""
                                 />
                                 <p className={styles.text}>
-                                    {location?.neighborhood?.[0]}
+                                    {coffeeStore.location?.neighborhood?.[0]}
                                 </p>
                             </div>
                         )}
