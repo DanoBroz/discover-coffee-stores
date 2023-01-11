@@ -9,6 +9,9 @@ import styles from "../../styles/coffee-store.module.css";
 import classnames from "classnames";
 import { fetchCoffeeStores } from "../../lib/coffee-stores";
 import coffeeStoresDummy from "../../data/coffee-stores.json";
+import { useContext, useEffect, useState } from "react";
+import { isEmpty } from "../../utils";
+import { StoreContext } from "../../store/store-context";
 
 interface CoffeeStoreProps {
     coffeeStore: CoffeeStore;
@@ -40,8 +43,15 @@ export const getStaticPaths = async () => {
     };
 };
 
-export default function CoffeeStore({ coffeeStore }: CoffeeStoreProps) {
-    const { isFallback } = useRouter();
+export default function CoffeeStore(initialProps: CoffeeStoreProps) {
+    const { isFallback, query } = useRouter();
+    const {
+        state: { coffeeStores },
+    } = useContext(StoreContext);
+
+    const [coffeeStore, setCoffeeStore] = useState<CoffeeStore | undefined>(
+        initialProps.coffeeStore
+    );
 
     const handleUpvoteButton = () => {};
 
@@ -49,11 +59,26 @@ export default function CoffeeStore({ coffeeStore }: CoffeeStoreProps) {
         return <div>Loading...</div>;
     }
 
+    const id = query.id;
+
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    useEffect(() => {
+        if (isEmpty(initialProps.coffeeStore)) {
+            if (coffeeStores.length > 0) {
+                const findCoffeeStoreById = coffeeStores.find(
+                    (coffeeStore) => coffeeStore.id === id
+                );
+                setCoffeeStore(findCoffeeStoreById);
+            }
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [id]);
+
     return (
         <>
             <div className={styles.layout}>
                 <Head>
-                    <title>{coffeeStore.name}</title>
+                    <title>{coffeeStore?.name}</title>
                 </Head>
                 <div className={styles.container}>
                     <div className={styles.col1}>
@@ -63,33 +88,35 @@ export default function CoffeeStore({ coffeeStore }: CoffeeStoreProps) {
                             </Link>
                         </div>
                         <div className={styles.nameWrapper}>
-                            <p className={styles.name}>{coffeeStore.name}</p>
+                            <p className={styles.name}>{coffeeStore?.name}</p>
                         </div>
                         <Image
                             src={
-                                coffeeStore.imgUrl ||
+                                coffeeStore?.imgUrl ||
                                 coffeeStoresDummy[0].imgUrl
                             }
                             width={600}
                             height={300}
-                            alt={coffeeStore.name}
+                            alt={coffeeStore?.name || "coffee store"}
                             style={{ objectFit: "cover" }}
                             className={styles.storeImg}
                         />
                     </div>
                     <div className={classnames("glass", styles.col2)}>
-                        <div className={styles.iconWrapper}>
-                            <Image
-                                src="/static/icons/places.svg"
-                                width="24"
-                                height="24"
-                                alt=""
-                            />
-                            <p className={styles.text}>
-                                {coffeeStore.location.address}
-                            </p>
-                        </div>
-                        {coffeeStore.location.neighborhood && (
+                        {coffeeStore?.location?.address && (
+                            <div className={styles.iconWrapper}>
+                                <Image
+                                    src="/static/icons/places.svg"
+                                    width="24"
+                                    height="24"
+                                    alt=""
+                                />
+                                <p className={styles.text}>
+                                    {coffeeStore?.location?.address}
+                                </p>
+                            </div>
+                        )}
+                        {coffeeStore?.location?.neighborhood && (
                             <div className={styles.iconWrapper}>
                                 <Image
                                     src="/static/icons/nearMe.svg"
@@ -98,7 +125,7 @@ export default function CoffeeStore({ coffeeStore }: CoffeeStoreProps) {
                                     alt=""
                                 />
                                 <p className={styles.text}>
-                                    {coffeeStore.location?.neighborhood?.[0]}
+                                    {coffeeStore?.location?.neighborhood?.[0]}
                                 </p>
                             </div>
                         )}

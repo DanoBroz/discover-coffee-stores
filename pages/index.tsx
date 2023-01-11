@@ -8,7 +8,7 @@ import coffeeStoresDummy from "../data/coffee-stores.json";
 import { GetStaticProps } from "next";
 import { fetchCoffeeStores } from "../lib/coffee-stores";
 import { useTrackLocation } from "../hooks/useTrackLocation";
-import { StoreContext } from "./_app";
+import { StoreContext } from "../store/store-context";
 
 export interface CoffeeStore {
     id: string;
