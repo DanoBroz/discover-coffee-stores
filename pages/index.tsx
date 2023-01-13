@@ -1,7 +1,7 @@
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
 import Banner from "../components/Banner";
-import { MouseEvent, useContext, useEffect, useState } from "react";
+import { MouseEvent, useContext, useEffect } from "react";
 import Image from "next/image";
 import Card from "../components/Card";
 import coffeeStoresDummy from "../data/coffee-stores.json";
@@ -68,6 +68,7 @@ export default function Home(props: HomeProps) {
             }
         }
         setCoffeeStoresByLocation();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [state.latLong]);
 
     return (
