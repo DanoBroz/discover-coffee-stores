@@ -4,8 +4,6 @@ const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(
     process.env.AIRTABLE_BASE_KEY
 );
 
-const table = base("coffee-stores");
-
 const createCoffeeStore = async (req: NextApiRequest, res: NextApiResponse) => {
     res.status(200).json({ msg: "hello" });
 };
