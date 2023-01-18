@@ -9,42 +9,63 @@ const table = base("coffee-stores");
 const createCoffeeStore = async (req: NextApiRequest, res: NextApiResponse) => {
     const findCoffeeStoreRecords = await table
         .select({
-            filterByFormula: `id="2"`,
+            filterByFormula: `id="${req.body.id}"`,
         })
         .firstPage();
 
     console.log({ findCoffeeStoreRecords });
 
     if (req.method === "POST") {
+        const { id, name, neighborhood, address, imgUrl, voting } = req.body;
+
         try {
-            if (findCoffeeStoreRecords.length > 0) {
-                const records = findCoffeeStoreRecords.map(
-                    (record: { fields: any[] }) => ({ ...record.fields })
-                );
-                res.json(records);
+            if (id) {
+                if (findCoffeeStoreRecords.length > 0) {
+                    const records = findCoffeeStoreRecords.map(
+                        (record: { fields: any[] }) => ({ ...record.fields })
+                    );
+                    res.json(records);
+                } else {
+                    if (name) {
+                        const createRecords = await table.create([
+                            {
+                                fields: {
+                                    id,
+                                    name,
+                                    neighborhood,
+                                    address,
+                                    imgUrl,
+                                    voting,
+                                },
+                            },
+                        ]);
+
+                        const records = createRecords.map(
+                            (record: { fields: any[] }) => ({
+                                ...record.fields,
+                            })
+                        );
+
+                        res.json(records);
+                    } else {
+                        res.status(400).json({
+                            msg: "Missing fields: Name",
+                        });
+                    }
+                }
             } else {
-                const createRecords = await table.create([
-                    {
-                        fields: {
-                            id: "2",
-                            name: "Starbucks",
-                            address: "123 Main St",
-                            neighborhood: "Downtown",
-                            voting: 200,
-                            imgUrl: "https://picsum.photos/200",
-                        },
-                    },
-                ]);
-
-                const records = createRecords.map(
-                    (record: { fields: any[] }) => ({ ...record.fields })
-                );
-
-                res.json(records);
+                res.status(400).json({
+                    msg: "Missing fields: Id",
+                });
             }
         } catch (error) {
-            console.error(error);
-            res.status(500).json({ msg: "Something went wrong" });
+            console.error(
+                "Something went wrong with finding or creating a store",
+                error
+            );
+            res.status(500).json({
+                msg: "Something went wrong with finding or creating a store",
+            });
         }
     }
 
