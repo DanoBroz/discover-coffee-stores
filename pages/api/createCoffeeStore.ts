@@ -1,10 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-const Airtable = require("airtable");
-const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(
-    process.env.AIRTABLE_BASE_KEY
-);
-
-const table = base("coffee-stores");
+import { table, getMinifiedRecords } from "../../lib/airtable";
 
 const createCoffeeStore = async (req: NextApiRequest, res: NextApiResponse) => {
     const findCoffeeStoreRecords = await table
@@ -13,17 +8,14 @@ const createCoffeeStore = async (req: NextApiRequest, res: NextApiResponse) => {
         })
         .firstPage();
 
-    console.log({ findCoffeeStoreRecords });
-
     if (req.method === "POST") {
         const { id, name, neighborhood, address, imgUrl, voting } = req.body;
 
         try {
             if (id) {
                 if (findCoffeeStoreRecords.length > 0) {
-                    const records = findCoffeeStoreRecords.map(
-                        (record: { fields: any[] }) => ({ ...record.fields })
-                    );
+                    const records = getMinifiedRecords(findCoffeeStoreRecords);
+
                     res.json(records);
                 } else {
                     if (name) {
@@ -40,11 +32,7 @@ const createCoffeeStore = async (req: NextApiRequest, res: NextApiResponse) => {
                             },
                         ]);
 
-                        const records = createRecords.map(
-                            (record: { fields: any[] }) => ({
-                                ...record.fields,
-                            })
-                        );
+                        const records = getMinifiedRecords(createRecords);
 
                         res.json(records);
                     } else {
