@@ -16,12 +16,18 @@ const createCoffeeStore = async (req: NextApiRequest, res: NextApiResponse) => {
     console.log({ findCoffeeStoreRecords });
 
     if (req.method === "POST") {
-        if (findCoffeeStoreRecords.length > 0) {
-            // const re
-            // findCoffeeStoreRecords.map(record => )
-            res.json(findCoffeeStoreRecords);
-        } else {
-            res.json({ msg: "no records found" });
+        try {
+            if (findCoffeeStoreRecords.length > 0) {
+                const records = findCoffeeStoreRecords.map(
+                    (record: { fields: any[] }) => ({ ...record.fields })
+                );
+                res.json(records);
+            } else {
+                res.json({ msg: "no records found" });
+            }
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ msg: "Something went wrong" });
         }
     }
 
