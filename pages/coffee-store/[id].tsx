@@ -103,9 +103,10 @@ export default function CoffeeStore(initialProps: CoffeeStoreProps) {
                     handleCreateCoffeeStore(coffeeStoreFromContext);
                 }
             }
+        } else {
+            handleCreateCoffeeStore(initialProps.coffeeStore);
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [id]);
+    }, [coffeeStores, id, initialProps.coffeeStore]);
 
     return (
         <>
