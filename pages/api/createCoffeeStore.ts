@@ -9,7 +9,7 @@ const table = base("coffee-stores");
 const createCoffeeStore = async (req: NextApiRequest, res: NextApiResponse) => {
     const findCoffeeStoreRecords = await table
         .select({
-            filterByFormula: `id="0"`,
+            filterByFormula: `id="2"`,
         })
         .firstPage();
 
@@ -23,7 +23,24 @@ const createCoffeeStore = async (req: NextApiRequest, res: NextApiResponse) => {
                 );
                 res.json(records);
             } else {
-                res.json({ msg: "no records found" });
+                const createRecords = await table.create([
+                    {
+                        fields: {
+                            id: "2",
+                            name: "Starbucks",
+                            address: "123 Main St",
+                            neighborhood: "Downtown",
+                            voting: 200,
+                            imgUrl: "https://picsum.photos/200",
+                        },
+                    },
+                ]);
+
+                const records = createRecords.map(
+                    (record: { fields: any[] }) => ({ ...record.fields })
+                );
+
+                res.json(records);
             }
         } catch (error) {
             console.error(error);
