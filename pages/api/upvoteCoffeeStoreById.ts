@@ -18,7 +18,17 @@ const upvoteCoffeeStoreById = async (
                 const records = await findRecordByFilter(id);
 
                 if (records.length !== 0) {
-                    res.status(200).json(records);
+                    const record = records[0];
+                    const updatedRecord = await table.update([
+                        {
+                            id: record.id,
+                            fields: {
+                                voting: record.voting + 1,
+                            },
+                        },
+                    ]);
+
+                    res.status(200).json(updatedRecord);
                 } else {
                     res.status(400).json({ message: `id could not be found` });
                 }
