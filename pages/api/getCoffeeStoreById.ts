@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { getMinifiedRecords, table } from "../../lib/airtable";
+import { findRecordByFilter } from "../../lib/airtable";
 
 const getCoffeeStoreById = async (
     req: NextApiRequest,
@@ -9,23 +9,20 @@ const getCoffeeStoreById = async (
 
     try {
         if (id) {
-            const findCoffeeStoreRecords = await table
-                .select({
-                    filterByFormula: `id="${id}"`,
-                })
-                .firstPage();
-            if (findCoffeeStoreRecords.length > 0) {
-                const records = getMinifiedRecords(findCoffeeStoreRecords);
+            const records = await findRecordByFilter(id);
 
+            if (records.length !== 0) {
                 res.json(records);
             } else {
-                res.json({ msg: "No records found" });
+                res.json({ message: `id could not be found` });
             }
         } else {
-            res.status(400).json({ msg: "Missing fields: Id" });
+            res.status(400);
+            res.json({ message: "Id is missing" });
         }
     } catch (error) {
-        res.status(500).json({ msg: "Something went wrong", error });
+        res.status(500);
+        res.json({ message: "Something went wrong", error });
     }
 };
 
