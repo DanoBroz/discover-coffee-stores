@@ -2,17 +2,16 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { table, getMinifiedRecords } from "../../lib/airtable";
 
 const createCoffeeStore = async (req: NextApiRequest, res: NextApiResponse) => {
-    const findCoffeeStoreRecords = await table
-        .select({
-            filterByFormula: `id="${req.body.id}"`,
-        })
-        .firstPage();
-
     if (req.method === "POST") {
         const { id, name, neighborhood, address, imgUrl, voting } = req.body;
 
         try {
             if (id) {
+                const findCoffeeStoreRecords = await table
+                    .select({
+                        filterByFormula: `id="${req.query.id}"`,
+                    })
+                    .firstPage();
                 if (findCoffeeStoreRecords.length > 0) {
                     const records = getMinifiedRecords(findCoffeeStoreRecords);
 
