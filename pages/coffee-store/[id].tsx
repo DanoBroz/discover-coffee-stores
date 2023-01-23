@@ -53,7 +53,11 @@ export default function CoffeeStore(initialProps: CoffeeStoreProps) {
         initialProps.coffeeStore
     );
 
-    const handleUpvoteButton = () => {};
+    const [votingCount, setVotingCount] = useState(0);
+
+    const handleUpvoteButton = () => {
+        setVotingCount((prevCount) => prevCount + 1);
+    };
 
     if (isFallback) {
         return <div>Loading...</div>;
@@ -170,7 +174,7 @@ export default function CoffeeStore(initialProps: CoffeeStoreProps) {
                                 height="24"
                                 alt=""
                             />
-                            <p className={styles.text}>1</p>
+                            <p className={styles.text}>{votingCount}</p>
                         </div>
 
                         <button
