@@ -12,7 +12,6 @@ const upvoteCoffeeStoreById = async (
     if (req.method === "PUT") {
         try {
             const { id } = req.query;
-            const { voting } = req.body;
 
             if (id) {
                 const records = await findRecordByFilter(id);
@@ -21,14 +20,16 @@ const upvoteCoffeeStoreById = async (
                     const record = records[0];
                     const updatedRecord = await table.update([
                         {
-                            id: record.id,
+                            id: record.recordId,
                             fields: {
                                 voting: record.voting + 1,
                             },
                         },
                     ]);
 
-                    res.status(200).json(updatedRecord);
+                    const minifiedRecord = getMinifiedRecords(updatedRecord);
+
+                    res.status(200).json(minifiedRecord);
                 } else {
                     res.status(400).json({ message: `id could not be found` });
                 }
