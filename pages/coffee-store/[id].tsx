@@ -10,8 +10,10 @@ import classnames from "classnames";
 import { fetchCoffeeStores } from "../../lib/coffee-stores";
 import coffeeStoresDummy from "../../data/coffee-stores.json";
 import { useContext, useEffect, useState } from "react";
-import { isEmpty } from "../../utils";
+import { fetcher, isEmpty } from "../../utils";
 import { StoreContext } from "../../store/store-context";
+
+import useSWR from "swr";
 
 interface CoffeeStoreProps {
     coffeeStore: CoffeeStore;
@@ -55,9 +57,26 @@ export default function CoffeeStore(initialProps: CoffeeStoreProps) {
 
     const [votingCount, setVotingCount] = useState(0);
 
+    const { data, error } = useSWR(
+        `/api/getCoffeeStoreById?id=${query.id}`,
+        fetcher
+    );
+
+    useEffect(() => {
+        if (data && data.length > 0) {
+            console.log("data from swr", data);
+            setCoffeeStore(data[0]);
+            setVotingCount(data[0].voting);
+        }
+    }, [data]);
+
     const handleUpvoteButton = () => {
         setVotingCount((prevCount) => prevCount + 1);
     };
+
+    if (error) {
+        return <div>Error loading coffee store</div>;
+    }
 
     if (isFallback) {
         return <div>Loading...</div>;
