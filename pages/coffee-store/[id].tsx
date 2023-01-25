@@ -64,7 +64,6 @@ export default function CoffeeStore(initialProps: CoffeeStoreProps) {
 
     useEffect(() => {
         if (data && data.length > 0) {
-            console.log("data from swr", data);
             setCoffeeStore(data[0]);
             setVotingCount(data[0].voting);
         }
@@ -83,7 +82,6 @@ export default function CoffeeStore(initialProps: CoffeeStoreProps) {
             });
 
             const dbCoffeeStore = response.json();
-            console.log({ dbCoffeeStore });
 
             if (dbCoffeeStore && dbCoffeeStore.length > 0) {
                 setVotingCount((prevCount) => prevCount + 1);
@@ -127,7 +125,6 @@ export default function CoffeeStore(initialProps: CoffeeStoreProps) {
             });
 
             const dbCoffeeStore = response.json();
-            console.log({ dbCoffeeStore });
         } catch (error) {
             console.error("Error creating coffee store", error);
         }
